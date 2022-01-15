@@ -24,14 +24,37 @@ let Fetcher = {
     });
     return await res.json();
   },
-
   AuthSignin: async function (setdada) {
-    let res = await fetch(baseUrl + '/auth/users/authenticate', {
+    let url = baseUrl + '/auth/users/authenticate';
+    let res = await fetch(url, {
       method: 'POST',
       body: setdada,
       credentials: 'include',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    return await res.json();
+  },
+  GetSection: async function (setdada) {
+    let url = baseUrl + '/auth/users/authenticate';
+    let res = await fetch(url, {
+      method: 'get',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    return await res.json();
+  },
+  PutSection: async function (setdada) {
+    let url = baseUrl + '/auth/users/authenticate';
+    let res = await fetch(url, {
+      method: 'POST',
+      body: setdada,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
     });
     return await res.json();

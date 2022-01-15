@@ -6,13 +6,14 @@ export default {
   worker: {downloadContent: {}, modalcontent: ''},
   IMAGES: {
     SPLASH: require('../assets/splash.png'),
+    LO_SPLASH: require('../assets/lo_splash.png'),
     LOGO: require('../Images/logo.png'),
   },
   FONTS: {
     Montserrat_LightItalic: require('../assets/fonts/Montserrat-LightItalic.ttf'),
   },
   COLORS: {
-    primary: '#f4440cff',
+    primary: '#fd7e14',
     secondary: '#204b9bff',
     primary_pure: '#f4440cff',
     accent: '#50c878',
@@ -60,6 +61,7 @@ export default {
     signout: 'Déconnecter',
     newHere: 'Vous êtes nouveau ici ?',
     alreadyRegistered: 'Vous avez déjà un compte ? ',
+    translate: 'Traduire',
     password_forgot: 'mot de passe oublié ?',
     parcourrir: 'Parcourir',
     terms_declaration: 'En utilisant nos services, vous acceptez nos ',

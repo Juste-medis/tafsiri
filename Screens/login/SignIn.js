@@ -1,9 +1,17 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, Image, Text, ScrollView, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  ScrollView,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 import Globals from '../../Ressources/Globals';
 import {styleSignIn as styles} from '../../Ressources/Styles';
 import Storer from '../../API/storer';
-import Fetcher from '../../API/fetcher';
+import Fetcher from '../../API/fakeApi';
 import {UriEncoder} from '../../Helpers/Utils';
 import RNReastart from 'react-native-restart';
 import * as yup from 'yup';
@@ -11,14 +19,17 @@ import Toast from 'react-native-toast-message';
 import {Title} from 'react-native-paper';
 import FormButton from '../../components/FormButton';
 import FormInput from '../../components/FormInput';
+import SelectDropdown from 'react-native-select-dropdown';
+
+const languages = ['Fongbe', 'Goubgbe', 'Yoruba'];
 
 //search "beautiful textinput on google"
 export default function SignIn({navigation}) {
-  const [username, setusername] = useState('');
-  const [code, setcode] = useState('');
+  const [phone_number, setphone_number] = useState();
+  const [code, setcode] = useState();
   var [wrong_logins_text, set_wrong_text] = useState('');
   var [spinner, setspinner] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [language, setlanguage] = useState('');
 
   function err_err(err) {
     setspinner(false);
@@ -26,7 +37,7 @@ export default function SignIn({navigation}) {
       type: 'error',
       text1: 'Eureur',
       text2:
-        err.name == 'TypeError'
+        err.name === 'TypeError'
           ? Globals.STRINGS.no_internet
           : err.message || Globals.STRINGS.Ocurred_error,
     });
@@ -35,16 +46,16 @@ export default function SignIn({navigation}) {
     await yup
       .object()
       .shape({
-        username: yup
-          .string()
-          .min(3, 'Identifiant Invalide')
-          .required('Vous devez entrer un Identifiant'),
+        phone_number: yup
+          .number()
+          .min(3, 'Telephone Invalide')
+          .required('Vous devez entrer un Tel'),
         code: yup
-          .string()
-          .min(3, 'Mot de passe invalide')
-          .required('Vous devez entrer un mot de passe.'),
+          .number()
+          .min(3, 'Code invalide')
+          .required('Vous devez entrer un code'),
       })
-      .validate({username, code});
+      .validate({phone_number, code});
   }
   async function onSignInPressed() {
     try {
@@ -52,20 +63,26 @@ export default function SignIn({navigation}) {
       setspinner(true);
       Fetcher.AuthSignin(
         UriEncoder({
-          username: username,
-          user_pass: code,
+          phone_number: phone_number,
+          user_code: code,
         }),
       )
         .then(res => {
           setspinner(false);
           if (res.message) {
-            setModalVisible(true);
+            // setModalVisible(true);
           } else {
             Fetcher.CheckAuth(20)
-              .then(res => {
-                if (res.username) {
-                  Globals.PROFIL_INFO = res;
-                  Storer.storeData('@ProfilInfo', res).then(() => {
+              .then(resi => {
+                if (res.name) {
+                  Globals.PROFIL_INFO = resi;
+                  Storer.storeData('@ProfilInfo', {
+                    ...resi,
+                    ...{
+                      phone_number: phone_number,
+                      user_code: code,
+                    },
+                  }).then(() => {
                     Storer.storeData('@USER_TYPE', 1).then(() => {
                       RNReastart.Restart();
                     });
@@ -87,7 +104,7 @@ export default function SignIn({navigation}) {
     }
   }
   return (
-    <View style={styles.container}>
+    <ImageBackground style={styles.container} source={Globals.IMAGES.LO_SPLASH}>
       <Toast />
       <Image source={Globals.IMAGES.LOGO} style={styles.Image_style} />
       <ScrollView style={styles.center_scroll}>
@@ -100,22 +117,43 @@ export default function SignIn({navigation}) {
               </Text>
             </View>
           )}
-
           <FormInput
             labelName="Numéro"
-            value={username}
+            style={styles.input}
+            value={phone_number}
+            keyboardType="number-pad"
             autoCapitalize="none"
-            onChangeText={name => setusername(name)}
+            onChangeText={name => setphone_number(name)}
             placeholder={`${Globals.STRINGS.phone}`}
           />
 
           <FormInput
             labelName="Code"
             value={code}
+            keyboardType="number-pad"
             style={styles.input}
             onChangeText={usercode => setcode(usercode)}
             placeholder="######"
           />
+          <View style={{paddingVertical: 20}}>
+            <Text
+              style={{fontWeight: 'bold', textAlign: 'center', color: 'black'}}>
+              {Globals.STRINGS.language}:
+            </Text>
+            <SelectDropdown
+              defaultValue="Fongbe"
+              data={languages}
+              onSelect={(selectedItem, index) => {
+                setlanguage(selectedItem);
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+            />
+          </View>
 
           <View style={styles.err_cont}>
             {spinner ? (
@@ -149,6 +187,6 @@ export default function SignIn({navigation}) {
           </Text>
         </Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 }

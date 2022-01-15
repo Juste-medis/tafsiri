@@ -1,99 +1,141 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
-import {Text, View, Image} from 'react-native';
+import {Text, View} from 'react-native';
 import Globals from '../../Ressources/Globals';
 import {styleDashBoard as styles} from '../../Ressources/Styles';
 import FormButton from '../../components/FormButton';
-import {Button, IconButton} from 'react-native-paper';
+import {Button} from 'react-native-paper';
+import Fetcher from '../../API/fakeApi';
+import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Storer from '../../API/storer';
+import RNReastart from 'react-native-restart';
 
 export default function Dasboard({navigation}) {
-  const [shoIcon, setshoIcon] = React.useState(false);
   const [dataprop, setdataprop] = React.useState({
-    saved: 5,
-    checked: 15,
-    rejected: 20,
-    earns: 30,
+    saved: 0,
+    checked: 0,
+    rejected: 0,
+    earned: 0,
+    name: '',
   });
+  const [spinner, setspinner] = React.useState(false);
+  function err_err(err) {
+    setspinner(false);
+    Toast.show({
+      type: 'error',
+      text1: 'Eureur',
+      text2:
+        err.name === 'TypeError'
+          ? Globals.STRINGS.no_internet
+          : err.message || Globals.STRINGS.Ocurred_error,
+    });
+  }
   useEffect(() => {
+    load_init();
     return () => {};
   }, []);
+  const load_init = () => {
+    setspinner(true);
+    Fetcher.GetUserData()
+      .then(res => {
+        setspinner(false);
+        if (res.message) {
+          err_err(res);
+        } else {
+          setdataprop({...dataprop, ...res});
+        }
+        setspinner(false);
+      })
+      .catch(err => {
+        err_err(err);
+      });
+  };
 
   const MiddleFielder = meta => {
     return (
       <View style={styles.middle_fields_container}>
         <Text style={styles.midle_prop_value}>{meta.value}</Text>
-        {shoIcon ? (
-          <IconButton
-            icon={meta.icon}
-            color={Globals.COLORS.secondary}
-            size={20}
-          />
-        ) : (
-          <Text style={styles.midle_prop_title}>{meta.legend}</Text>
-        )}
+        <Text style={styles.midle_prop_title}>
+          <Icon icon={meta.icon} color="#000" size={20} />
+          {meta.legend}
+        </Text>
       </View>
     );
   };
 
   return (
     <View style={styles.main_container}>
-      <View>
-        <FormButton
-          style={styles.action_button}
-          title={Globals.STRINGS.checkout}
-          modeValue="contained"
-          labelStyle={styles.loginButtonLabel}
-          onPress={() => {
-            navigation.navigate('Recorder');
-          }}
-        />
-        <Button
-          icon={shoIcon ? 'creation' : 'account-arrow-left-outline'}
-          mode="contained"
-          onPress={() => setshoIcon(!shoIcon)}></Button>
-      </View>
+      <Toast />
+
       <View>
         <View style={styles.top_container}>
-          <Image style={styles.image} source={Globals.IMAGES.SPLASH} />
-          <Text style={styles.autor_name}>ttttttttt</Text>
+          <Icon name="user" size={200} color="grey" />
+          <Text style={styles.autor_name}>
+            {dataprop.name}({Globals.PROFIL_INFO.phone_number})
+          </Text>
         </View>
         <View style={styles.middle_container}>
           {MiddleFielder({
-            icon: 'save',
+            icon: 'microphone',
             legend: Globals.STRINGS.save,
             value: dataprop.saved,
           })}
           {MiddleFielder({
-            icon: 'checkbox',
+            icon: 'check-circle',
             legend: Globals.STRINGS.checked,
             value: dataprop.checked,
           })}
           {MiddleFielder({
-            icon: 'close',
+            icon: 'remove',
             legend: Globals.STRINGS.rejected,
             value: dataprop.rejected,
           })}
           {MiddleFielder({
-            icon: 'dollar',
+            icon: 'usd',
             legend: Globals.STRINGS.earned,
             value: dataprop.earned,
           })}
         </View>
-        <View>
-          <FormButton
-            style={styles.action_button}
-            title={Globals.STRINGS.checkout}
-            modeValue="contained"
-            labelStyle={styles.loginButtonLabel}
-            onPress={() => {}}
-          />
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
           <FormButton
             style={styles.action_button}
             title={Globals.STRINGS.signout}
             modeValue="contained"
             labelStyle={styles.loginButtonLabel}
-            onPress={() => {}}
+            onPress={() => {
+              Storer.removeData();
+              RNReastart.Restart();
+            }}
           />
+
+          <Button
+            style={styles.action_button}
+            mode="outlined"
+            labelStyle={styles.loginButtonLabel}
+            theme={{colors: {primary: '#fd7e14'}}}
+            onPress={() => {}}>
+            {Globals.STRINGS.checkout}
+          </Button>
         </View>
+        <Button
+          style={[styles.action_button, {margin: 20}]}
+          contentStyle={{margin: 20, padding: 1}}
+          labelStyle={{color: 'white'}}
+          theme={{colors: {primary: '#fd7e14'}}}
+          mode="contained"
+          onPress={() => {
+            navigation.navigate('Recorder');
+          }}>
+          {Globals.STRINGS.translate}
+        </Button>
       </View>
       <View></View>
     </View>

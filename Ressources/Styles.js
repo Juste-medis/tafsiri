@@ -17,11 +17,15 @@ if (mobile_360_750) {
       justifyContent: 'space-between',
       flexDirection: 'column',
       backgroundColor: Globals.COLORS.white,
+      paddingTop: 100,
+    },
+    center_scroll: {
+      width: '100%',
     },
     titleText: {
-      fontSize: 50,
-      marginBottom: 10,
-      color: Globals.COLORS.blue_dark,
+      fontSize: 18,
+      marginVertical: 10,
+      color: Globals.COLORS.grey,
       width: '100%',
       textAlign: 'center',
       fontFamily: 'Neogrotesk',
@@ -64,9 +68,6 @@ if (mobile_360_750) {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    center_scroll: {
-      width: '100%',
-    },
     bottom_container: {
       alignItems: 'center',
       justifyContent: 'space-around',
@@ -90,12 +91,11 @@ if (mobile_360_750) {
       height: 50,
     },
     input: {
-      width: '90%',
-      height: 50,
+      width: '70%',
       elevation: 6,
-      padding: 10,
-      color: Globals.COLORS.black,
+      color: Globals.COLORS.grey,
       backgroundColor: Globals.COLORS.white,
+      fontWeight: 'bold',
       marginTop: 4,
     },
     wrong_login_container: {
@@ -138,9 +138,8 @@ if (mobile_360_750) {
     },
     top_container: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
-      width: '100%',
       justifyContent: 'space-between',
       margin: 10,
     },
@@ -152,27 +151,32 @@ if (mobile_360_750) {
     },
     action_button: {
       borderRadius: 50,
-      height: 100,
-      width: '30%',
-      padding: 4,
     },
     middle_container: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-around',
+      width: '100%',
+      paddingBottom: 50,
     },
     middle_fields_container: {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'space-around',
     },
-    midle_prop_title: {
-      fontWeight: 'bold',
-      fontSize: 18,
-    },
     midle_prop_value: {
+      fontWeight: 'bold',
+      fontSize: 14,
+      color: '#fd7e14',
+    },
+    autor_name: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      color: Globals.COLORS.blue_dark,
+    },
+    midle_prop_title: {
       fontWeight: '700',
-      color: Globals.COLORS.arsenic,
+      color: Globals.COLORS.grey,
       fontSize: 14,
     },
     loginButtonLabel: {
@@ -197,6 +201,9 @@ if (mobile_360_750) {
       justifyContent: 'space-between',
       margin: 10,
     },
+    bottom_container: {
+      textAlign: 'center',
+    },
     image: {
       borderRadius: 50,
       height: 100,
@@ -205,19 +212,37 @@ if (mobile_360_750) {
     },
     pass_button: {
       borderRadius: 50,
-      height: 100,
-      width: '100%',
+      textAlign: 'center',
+      width: '90%',
       padding: 4,
     },
     middle_container: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'space-around',
+      alignItems: 'center',
     },
     middle_fields_container: {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'space-around',
+    },
+    translate_text: {
+      fontWeight: 'normal',
+      color: Globals.COLORS.arsenic,
+      fontSize: 15,
+      paddingTop: 20,
+    },
+    translate_value: {
+      fontWeight: 'bold',
+      color: Globals.COLORS.black,
+      fontSize: 20,
+      paddingBottom: 20,
+    },
+    translate_lang: {
+      fontWeight: 'bold',
+      color: Globals.COLORS.blue_dark,
+      paddingBottom: 20,
     },
     midle_prop_title: {
       fontWeight: 'bold',

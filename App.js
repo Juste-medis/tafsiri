@@ -1,27 +1,22 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'react-native-gesture-handler';
 import Fetcher from './API/fetcher';
 import Storer from './API/storer';
 import Globals from './Ressources/Globals';
 import WelcomeNavigation from './Navigation/WelcomeNavigation';
 import MainNavigation from './Navigation/MainNavigation';
-import SignIn from './Screens/login/SignIn';
 
 //fonction de ping a internet, it atach a listener to internet and asign it to GLobal.internet
 Fetcher.FetchInternet();
 let isLogged;
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   const [spinner, setspinner] = React.useState(true);
   spinner &&
     Storer.getData('@USER_TYPE').then(data => {
@@ -42,6 +37,7 @@ const App = () => {
       <ImageBackground
         style={styles.background_container}
         source={Globals.IMAGES.SPLASH}>
+        <View style={{height: 10, width: 10}} />
         <View style={styles.bottom_container}>
           <ActivityIndicator
             style={styles.indicator}
@@ -60,13 +56,14 @@ const App = () => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    backgroundColor: 'green',
+    backgroundColor: 'transparent',
     alignItems: 'center',
   },
   background_container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    width: '100%',
   },
   bottom_container: {
     position: 'absolute',

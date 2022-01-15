@@ -14,46 +14,21 @@ function Navigation({navigation}) {
   return (
     <SafeAreaProvider>
       <Stack.Navigator
-        initialRouteName="SignIn"
+        initialRouteName="Dasboard"
         screenOptions={{
           gestureDirection: 'horizontal',
           transitionSpec: {
             open: TransitionSpecs.TransitionIOSSpec,
             close: TransitionSpecs.TransitionIOSSpec,
           },
-          headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-          cardStyleInterpolator: inter => {
-            let {current, next, layouts} = inter;
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateX: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.height, 0],
-                    }),
-                  },
-                  {
-                    scale: next
-                      ? next.progress.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [1, 0.9],
-                        })
-                      : 1,
-                  },
-                ],
-              },
-              overlayStyle: {
-                opacity: current.progress.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 0.5],
-                }),
-              },
-            };
-          },
+          headerStyleInterpolator: HeaderStyleInterpolators.forSlideUp,
         }}>
-        <Stack.Screen name="SignIn" component={Dasboard} />
-        <Stack.Screen name="Signup" component={Recorder} />
+        <Stack.Screen name="Dasboard" component={Dasboard} />
+        <Stack.Screen
+          options={{title: 'Enregistrement'}}
+          name="Recorder"
+          component={Recorder}
+        />
       </Stack.Navigator>
     </SafeAreaProvider>
   );
