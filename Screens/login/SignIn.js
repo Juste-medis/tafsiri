@@ -11,25 +11,26 @@ import {
 import Globals from '../../Ressources/Globals';
 import {styleSignIn as styles} from '../../Ressources/Styles';
 import Storer from '../../API/storer';
-import Fetcher from '../../API/fakeApi';
 import {UriEncoder} from '../../Helpers/Utils';
 import RNReastart from 'react-native-restart';
-import * as yup from 'yup';
 import Toast from 'react-native-toast-message';
 import {Title} from 'react-native-paper';
 import FormButton from '../../components/FormButton';
 import FormInput from '../../components/FormInput';
 import SelectDropdown from 'react-native-select-dropdown';
+import Fetcher from '../../API/fetcher';
+import {Schemasignin} from '../../API/schemas';
 
 const languages = ['Fongbe', 'Goubgbe', 'Yoruba'];
 
 //search "beautiful textinput on google"
 export default function SignIn({navigation}) {
-  const [phone_number, setphone_number] = useState();
-  const [code, setcode] = useState();
-  var [wrong_logins_text, set_wrong_text] = useState('');
-  var [spinner, setspinner] = useState(false);
-  const [language, setlanguage] = useState('');
+  const [phone, setphone] = useState('97675062');
+  const [code, setcode] = useState('fl209');
+  const [language, setlanguage] = useState('Fongbe');
+
+  const [wrong_logins_text, set_wrong_text] = useState('');
+  const [spinner, setspinner] = useState(false);
 
   function err_err(err) {
     setspinner(false);
@@ -42,56 +43,41 @@ export default function SignIn({navigation}) {
           : err.message || Globals.STRINGS.Ocurred_error,
     });
   }
-  async function valideEnterdData() {
-    await yup
-      .object()
-      .shape({
-        phone_number: yup
-          .number()
-          .min(3, 'Telephone Invalide')
-          .required('Vous devez entrer un Tel'),
-        code: yup
-          .number()
-          .min(3, 'Code invalide')
-          .required('Vous devez entrer un code'),
-      })
-      .validate({phone_number, code});
-  }
   async function onSignInPressed() {
     try {
-      await valideEnterdData();
+      await Schemasignin.validate({phone, code, language});
       setspinner(true);
       Fetcher.AuthSignin(
-        UriEncoder({
-          phone_number: phone_number,
-          user_code: code,
+        JSON.stringify({
+          user: {
+            phone,
+            code,
+            language,
+          },
         }),
       )
         .then(res => {
           setspinner(false);
-          if (res.message) {
-            // setModalVisible(true);
+          if (res.errors) {
+            set_wrong_text(
+              typeof res.errors[0] === 'string'
+                ? res.errors[0]
+                : Globals.STRINGS.Ocurred_error,
+            );
+            setspinner(false);
           } else {
-            Fetcher.CheckAuth(20)
-              .then(resi => {
-                if (res.name) {
-                  Globals.PROFIL_INFO = resi;
-                  Storer.storeData('@ProfilInfo', {
-                    ...resi,
-                    ...{
-                      phone_number: phone_number,
-                      user_code: code,
-                    },
-                  }).then(() => {
-                    Storer.storeData('@USER_TYPE', 1).then(() => {
-                      RNReastart.Restart();
-                    });
-                  });
-                }
-              })
-              .catch(err => {
-                err_err(err);
+            console.log(res);
+            Globals.PROFIL_INFO = res;
+            Toast.show({
+              type: 'success',
+              text1: 'Bienvenu',
+              text2: res?.user?.username,
+            });
+            Storer.storeData('@ProfilInfo', {...res, phone, code}).then(() => {
+              Storer.storeData('@USER_TYPE', 1).then(() => {
+                RNReastart.Restart();
               });
+            });
           }
         })
         .catch(err => {
@@ -120,17 +106,16 @@ export default function SignIn({navigation}) {
           <FormInput
             labelName="Numéro"
             style={styles.input}
-            value={phone_number}
+            value={phone}
             keyboardType="number-pad"
             autoCapitalize="none"
-            onChangeText={name => setphone_number(name)}
+            onChangeText={name => setphone(name)}
             placeholder={`${Globals.STRINGS.phone}`}
           />
 
           <FormInput
             labelName="Code"
             value={code}
-            keyboardType="number-pad"
             style={styles.input}
             onChangeText={usercode => setcode(usercode)}
             placeholder="######"

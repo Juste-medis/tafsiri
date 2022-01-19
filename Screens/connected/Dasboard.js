@@ -6,7 +6,7 @@ import Globals from '../../Ressources/Globals';
 import {styleDashBoard as styles} from '../../Ressources/Styles';
 import FormButton from '../../components/FormButton';
 import {Button} from 'react-native-paper';
-import Fetcher from '../../API/fakeApi';
+import Fetcher from '../../API/fetcher';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Storer from '../../API/storer';
@@ -14,11 +14,11 @@ import RNReastart from 'react-native-restart';
 
 export default function Dasboard({navigation}) {
   const [dataprop, setdataprop] = React.useState({
-    saved: 0,
-    checked: 0,
-    rejected: 0,
-    earned: 0,
-    name: '',
+    recordings: Globals.PROFIL_INFO.user.recordings,
+    validated: Globals.PROFIL_INFO.user.validated,
+    rejected: Globals.PROFIL_INFO.user.rejected,
+    gain: Globals.PROFIL_INFO.user.gain,
+    username: Globals.PROFIL_INFO.user.username,
   });
   const [spinner, setspinner] = React.useState(false);
   function err_err(err) {
@@ -38,11 +38,23 @@ export default function Dasboard({navigation}) {
   }, []);
   const load_init = () => {
     setspinner(true);
-    Fetcher.GetUserData()
+    Fetcher.GetUserData(
+      JSON.stringify({
+        user: {
+          phone: Globals.PROFIL_INFO.phone,
+          code: Globals.PROFIL_INFO.code,
+          language: Globals.PROFIL_INFO.user.language,
+        },
+      }),
+    )
       .then(res => {
         setspinner(false);
-        if (res.message) {
-          err_err(res);
+        if (res.errors) {
+          err_err(
+            typeof res.errors[0] === 'string'
+              ? res.errors[0]
+              : Globals.STRINGS.Ocurred_error,
+          );
         } else {
           setdataprop({...dataprop, ...res});
         }
@@ -67,25 +79,25 @@ export default function Dasboard({navigation}) {
 
   return (
     <View style={styles.main_container}>
-      <Toast />
+      <Toast position="bottom" />
 
-      <View>
+      <View style={styles.middle_heberger}>
         <View style={styles.top_container}>
           <Icon name="user" size={200} color="grey" />
           <Text style={styles.autor_name}>
-            {dataprop.name}({Globals.PROFIL_INFO.phone_number})
+            {dataprop.username} ({Globals.PROFIL_INFO.phone})
           </Text>
         </View>
         <View style={styles.middle_container}>
           {MiddleFielder({
             icon: 'microphone',
             legend: Globals.STRINGS.save,
-            value: dataprop.saved,
+            value: dataprop.recordings,
           })}
           {MiddleFielder({
             icon: 'check-circle',
-            legend: Globals.STRINGS.checked,
-            value: dataprop.checked,
+            legend: Globals.STRINGS.validated,
+            value: dataprop.validated,
           })}
           {MiddleFielder({
             icon: 'remove',
@@ -94,8 +106,8 @@ export default function Dasboard({navigation}) {
           })}
           {MiddleFielder({
             icon: 'usd',
-            legend: Globals.STRINGS.earned,
-            value: dataprop.earned,
+            legend: Globals.STRINGS.gain,
+            value: dataprop.gain,
           })}
         </View>
         <View
@@ -104,6 +116,7 @@ export default function Dasboard({navigation}) {
             flexDirection: 'row',
             justifyContent: 'space-around',
             alignItems: 'center',
+            width: '100%',
           }}>
           <FormButton
             style={styles.action_button}
@@ -117,7 +130,7 @@ export default function Dasboard({navigation}) {
           />
 
           <Button
-            style={styles.action_button}
+            style={[styles.action_button, {marginTop: 10}]}
             mode="outlined"
             labelStyle={styles.loginButtonLabel}
             theme={{colors: {primary: '#fd7e14'}}}
@@ -126,8 +139,7 @@ export default function Dasboard({navigation}) {
           </Button>
         </View>
         <Button
-          style={[styles.action_button, {margin: 20}]}
-          contentStyle={{margin: 20, padding: 1}}
+          style={[styles.action_button, {marginVertical: 20, width: '50%'}]}
           labelStyle={{color: 'white'}}
           theme={{colors: {primary: '#fd7e14'}}}
           mode="contained"

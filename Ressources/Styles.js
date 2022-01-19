@@ -158,15 +158,28 @@ if (mobile_360_750) {
       justifyContent: 'space-around',
       width: '100%',
       paddingBottom: 50,
+      paddingHorizontal: 30,
+    },
+    middle_heberger: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      width: '100%',
+      alignItems: 'center',
     },
     middle_fields_container: {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'space-around',
     },
+    midle_prop_title: {
+      fontWeight: '700',
+      color: Globals.COLORS.grey,
+      fontSize: 13,
+    },
     midle_prop_value: {
       fontWeight: 'bold',
-      fontSize: 14,
+      fontSize: 16,
       color: '#fd7e14',
     },
     autor_name: {
@@ -174,11 +187,7 @@ if (mobile_360_750) {
       fontSize: 20,
       color: Globals.COLORS.blue_dark,
     },
-    midle_prop_title: {
-      fontWeight: '700',
-      color: Globals.COLORS.grey,
-      fontSize: 14,
-    },
+
     loginButtonLabel: {
       fontWeight: 'bold',
       color: Globals.COLORS.primary_pure,
@@ -187,17 +196,12 @@ if (mobile_360_750) {
   });
   tyleRecorder = StyleSheet.create({
     main_container: {
-      display: 'flex',
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
       backgroundColor: Globals.COLORS.white,
     },
     top_container: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      width: '100%',
       justifyContent: 'space-between',
       margin: 10,
     },
@@ -216,11 +220,15 @@ if (mobile_360_750) {
       width: '90%',
       padding: 4,
     },
+    middle_heberger: {
+      paddingTop: 50,
+    },
     middle_container: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-around',
       alignItems: 'center',
+      padding: 20,
     },
     middle_fields_container: {
       flexDirection: 'column',
@@ -231,13 +239,15 @@ if (mobile_360_750) {
       fontWeight: 'normal',
       color: Globals.COLORS.arsenic,
       fontSize: 15,
-      paddingTop: 20,
+      paddingTop: 30,
     },
     translate_value: {
       fontWeight: 'bold',
       color: Globals.COLORS.black,
       fontSize: 20,
       paddingBottom: 20,
+      textAlign: 'center',
+      paddingTop: 8,
     },
     translate_lang: {
       fontWeight: 'bold',

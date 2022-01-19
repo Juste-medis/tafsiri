@@ -26,6 +26,7 @@ class AudioRecorde extends Component {
     currentTime: 0.0,
     recording: false,
     paused: false,
+    playing: false,
     stoppedRecording: false,
     finished: false,
     audioPath: AudioUtils.DocumentDirectoryPath + '/test.aac',
@@ -114,7 +115,7 @@ class AudioRecorde extends Component {
     if (this.state.recording) {
       await this._stop();
     }
-
+    this.setState({playing: !this.state.playing});
     // These timeouts are a hacky workaround for some issues with react-native-sound.
     // See https://github.com/zmxv/react-native-sound/issues/89.
     setTimeout(() => {
@@ -131,6 +132,7 @@ class AudioRecorde extends Component {
           } else {
             console.log('playback failed due to audio decoding errors');
           }
+          this.setState({playing: !this.state.playing});
         });
       }, 100);
     }, 100);
@@ -240,7 +242,11 @@ class AudioRecorde extends Component {
               onPress={() => {
                 this._play();
               }}>
-              <Icon name="play" size={30} color="#000" />
+              <Icon
+                name={this.state.playing ? 'pause' : 'play'}
+                size={30}
+                color="#000"
+              />
             </Button>
             <View
               style={{
@@ -254,6 +260,7 @@ class AudioRecorde extends Component {
               <Button
                 mode="text"
                 theme={{colors: {primary: '#000'}}}
+                disabled={this.props.spinner}
                 onPress={() => {
                   this.setState({expanded: false});
                   RNFS.unlink(this.state.audioPath);
@@ -267,6 +274,8 @@ class AudioRecorde extends Component {
                   this.props.send_instance(this.state.audioPath);
                 }}
                 labelStyle={styles.loginButtonLabel}
+                disabled={this.props.spinner}
+                loading={this.props.spinner}
                 mode="contained"
                 theme={{colors: {primary: '#fd7e14'}}}>
                 <Text style={{color: 'white'}}>
@@ -281,19 +290,19 @@ class AudioRecorde extends Component {
               style={styles.pass_button}
               mode="text"
               theme={{colors: {primary: '#dddddd'}}}
-              onPress={() => {
-                if (
-                  this.props.tindex <
-                  this.props.sectiondata.trancriptarr.length - 1
-                ) {
+              onPress={async () => {
+                if (this.state.recording) {
+                  await this._stop();
+                }
+                if (this.props.sectiondata.sentences.length > 0) {
                   this.setState({expanded: false});
-
-                  RNFS.unlink(this.state.audioPath);
-
-                  this.props.setindex(this.props.tindex + 1);
+                  if (await RNFS.exists(this.state.audioPath)) {
+                    RNFS.unlink(this.state.audioPath);
+                  }
                 } else {
                   toast_message('Revenez plus tard pour de nouveaux textes');
                 }
+                this.props.load_init();
               }}>
               Je passe
             </Button>

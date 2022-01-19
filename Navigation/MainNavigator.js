@@ -23,7 +23,14 @@ function Navigation({navigation}) {
           },
           headerStyleInterpolator: HeaderStyleInterpolators.forSlideUp,
         }}>
-        <Stack.Screen name="Dasboard" component={Dasboard} />
+        <Stack.Screen
+          options={{
+            headerStyle: {backgroundColor: '#fd7e14'},
+            headerTitleStyle: {color: 'white'},
+          }}
+          name="Tableau de bord"
+          component={Dasboard}
+        />
         <Stack.Screen
           options={{title: 'Enregistrement'}}
           name="Recorder"

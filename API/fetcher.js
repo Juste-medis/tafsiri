@@ -15,7 +15,8 @@ let Fetcher = {
     });
   },
   AuthSignup: async function (setdada) {
-    let res = await fetch(baseUrl + '/auth/users/register', {
+    let url = baseUrl + '/api/users';
+    let res = await fetch(url, {
       method: 'post',
       body: JSON.stringify(setdada),
       headers: {
@@ -25,34 +26,44 @@ let Fetcher = {
     return await res.json();
   },
   AuthSignin: async function (setdada) {
-    let url = baseUrl + '/auth/users/authenticate';
+    let url = baseUrl + '/api/users/login';
     let res = await fetch(url, {
       method: 'POST',
       body: setdada,
-      credentials: 'include',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+      },
+    });
+    return await res.json();
+  },
+  GetUserData: async function (setdada) {
+    let url = baseUrl + '/api/users/login';
+    let res = await fetch(url, {
+      method: 'POST',
+      body: setdada,
+      headers: {
+        'Content-Type': 'application/json',
       },
     });
     return await res.json();
   },
   GetSection: async function (setdada) {
-    let url = baseUrl + '/auth/users/authenticate';
+    let url = baseUrl + '/api/users/login';
     let res = await fetch(url, {
-      method: 'get',
-      credentials: 'include',
+      method: 'POST',
+      body: setdada,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
     });
     return await res.json();
   },
   PutSection: async function (setdada) {
-    let url = baseUrl + '/auth/users/authenticate';
+    let url = baseUrl + '/api/speech/uploadfile';
+    console.log(url);
     let res = await fetch(url, {
       method: 'POST',
       body: setdada,
-      credentials: 'include',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
