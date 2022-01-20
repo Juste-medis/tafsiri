@@ -6,7 +6,7 @@ const {width, height} = Dimensions.get('screen');
 const mobile_360_750 = true;
 const mobile_500_1000 = width <= 500 && height <= 1000;
 
-let tyleSignIn, tyleRecorder, tyleDashBoard;
+let tyleSignIn, tyleRecorder, tyleDashBoard, tyleChallenge;
 
 if (mobile_360_750) {
   tyleSignIn = StyleSheet.create({
@@ -269,6 +269,40 @@ if (mobile_360_750) {
       fontSize: 16,
     },
   });
+  tyleChallenge = StyleSheet.create({
+    main_container: {backgroundColor: 'white', height: '100%'},
+    middle_container: {},
+    main_scroller: {
+      paddingBottom: '10%',
+      width: '100%',
+    },
+    text_top: {
+      width: '100%',
+      textAlign: 'center',
+      color: 'black',
+    },
+    top_metaCont: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      backgroundColor: '#c4c4c4ff',
+      padding: 10,
+      width: 120,
+    },
+    metaCont: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 40,
+    },
+    unity_page: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 3,
+      padding: 10,
+    },
+  });
 } else if (mobile_500_1000) {
   tyleSignIn = StyleSheet.create({
     wrapper: {},
@@ -276,4 +310,5 @@ if (mobile_360_750) {
 }
 export const styleSignIn = tyleSignIn,
   styleDashBoard = tyleDashBoard,
+  styleChallenge = tyleChallenge,
   styleRecorder = tyleRecorder;

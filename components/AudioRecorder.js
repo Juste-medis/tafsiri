@@ -17,6 +17,7 @@ import {toast_message} from '../Helpers/Utils';
 class AudioRecorde extends Component {
   constructor(props) {
     super(props);
+    this.recordedFileUrl = '';
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -51,6 +52,7 @@ class AudioRecorde extends Component {
         this.setState({currentTime: Math.floor(data.currentTime)});
       };
       AudioRecorder.onFinished = data => {
+        this.recordedFileUrl = data.audioFileURL;
         // Android callback comes in the form of a promise instead.
         if (Platform.OS === 'ios') {
           this._finishRecording(
@@ -160,11 +162,6 @@ class AudioRecorde extends Component {
   }
   _finishRecording(didSucceed, filePath, fileSize) {
     this.setState({finished: didSucceed});
-    console.log(
-      `Finished recording of duration ${
-        this.state.currentTime
-      } seconds at path: ${filePath} and size of ${fileSize || 0} bytes`,
-    );
   }
 
   render() {
@@ -271,7 +268,10 @@ class AudioRecorde extends Component {
 
               <Button
                 onPress={() => {
-                  this.props.send_instance(this.state.audioPath);
+                  this.props.send_instance(
+                    this.state.audioPath,
+                    this.recordedFileUrl,
+                  );
                 }}
                 labelStyle={styles.loginButtonLabel}
                 disabled={this.props.spinner}

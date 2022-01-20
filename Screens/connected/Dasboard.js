@@ -104,11 +104,12 @@ export default function Dasboard({navigation}) {
             legend: Globals.STRINGS.rejected,
             value: dataprop.rejected,
           })}
-          {MiddleFielder({
-            icon: 'usd',
-            legend: Globals.STRINGS.gain,
-            value: dataprop.gain,
-          })}
+          {Globals.PROFIL_INFO.user.profile === 'traducteur' &&
+            MiddleFielder({
+              icon: 'usd',
+              legend: Globals.STRINGS.gain,
+              value: dataprop.gain,
+            })}
         </View>
         <View
           style={{
@@ -128,15 +129,16 @@ export default function Dasboard({navigation}) {
               RNReastart.Restart();
             }}
           />
-
-          <Button
-            style={[styles.action_button, {marginTop: 10}]}
-            mode="outlined"
-            labelStyle={styles.loginButtonLabel}
-            theme={{colors: {primary: '#fd7e14'}}}
-            onPress={() => {}}>
-            {Globals.STRINGS.checkout}
-          </Button>
+          {Globals.PROFIL_INFO.user.profile === 'traducteur' && (
+            <Button
+              style={[styles.action_button, {marginTop: 10}]}
+              mode="outlined"
+              labelStyle={styles.loginButtonLabel}
+              theme={{colors: {primary: '#fd7e14'}}}
+              onPress={() => {}}>
+              {Globals.STRINGS.checkout}
+            </Button>
+          )}
         </View>
         <Button
           style={[styles.action_button, {marginVertical: 20, width: '50%'}]}
@@ -148,6 +150,20 @@ export default function Dasboard({navigation}) {
           }}>
           {Globals.STRINGS.translate}
         </Button>
+        {Globals.PROFIL_INFO.user.profile === 'joueur' && (
+          <Button
+            style={[
+              styles.action_button,
+              {marginVertical: 20, width: '50%', borderRadius: 0},
+            ]}
+            theme={{colors: {primary: Globals.COLORS.arsenic2}}}
+            mode="outlined"
+            onPress={() => {
+              navigation.navigate('Challenge');
+            }}>
+            challenge
+          </Button>
+        )}
       </View>
       <View></View>
     </View>

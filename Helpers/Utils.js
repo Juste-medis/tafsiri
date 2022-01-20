@@ -1,17 +1,17 @@
-import React from "react";
-import Globals from "../Ressources/Globals";
-import { Share } from "react-native";
-import { ToastAndroid, Alert } from "react-native";
+import React from 'react';
+import Globals from '../Ressources/Globals';
+import {Share} from 'react-native';
+import {ToastAndroid, Alert} from 'react-native';
 
 export function toast_message(mes) {
   ToastAndroid.show(mes, ToastAndroid.LONG);
 }
 
 export function alert_message(
-  title = "",
-  mes = "",
+  title = '',
+  mes = '',
   retry = Globals.STRINGS.retry,
-  handle = () => {}
+  handle = () => {},
 ) {
   Alert.alert(
     title,
@@ -20,35 +20,15 @@ export function alert_message(
       {
         text: Globals.STRINGS.cancel,
         onPress: () => {},
-        style: "cancel",
+        style: 'cancel',
       },
       {
         text: retry,
         onPress: handle,
       },
     ],
-    { cancelable: false }
+    {cancelable: false},
   );
-}
-
-export function showStars(stars) {
-  let plain = Math.trunc(stars);
-  let decimal = stars - plain;
-  let empty = Math.trunc(5 - stars);
-  let Result = [];
-  let starsKeys = 0;
-
-  for (let si = 0; si < plain; si++) {
-    Result.push(showStar(1, starsKeys));
-    starsKeys++;
-  }
-  if (decimal != 0) Result.push(showStar(decimal, starsKeys));
-  starsKeys++;
-  for (let si = 0; si < empty; si++) {
-    Result.push(showStar(2, starsKeys));
-    starsKeys++;
-  }
-  return Result;
 }
 
 export async function onShare(mes) {
@@ -75,7 +55,7 @@ export async function onShare(mes) {
  * @param {conv} time the ms time
  */
 export function secondTotime(time) {
-  return ~~(time / 60) + ":" + (time % 60 < 10 ? "0" : "") + (time % 60);
+  return ~~(time / 60) + ':' + (time % 60 < 10 ? '0' : '') + (time % 60);
 }
 
 /**
@@ -96,13 +76,13 @@ export function computeTime(time) {
  *to convert object to hour
  * @param {conv} time the ms time
  */
-export function hour_to_string(time, separator = " h ", limit = " min") {
+export function hour_to_string(time, separator = ' h ', limit = ' min') {
   let plain = Math.trunc(time);
   let minute = Math.trunc(60 * (time - plain));
   return `${
-    plain.toString().length === 1 ? "0" + plain : plain
+    plain.toString().length === 1 ? '0' + plain : plain
   } ${separator.toString()} ${
-    minute.toString().length === 1 ? "0" + minute : minute
+    minute.toString().length === 1 ? '0' + minute : minute
   } ${limit.toString()} `;
 }
 
@@ -115,13 +95,13 @@ export function date_stringer(last_modified) {
     month = last_modified.getMonth() + 1,
     dt = last_modified.getDate();
   if (dt < 10) {
-    dt = "0" + dt;
+    dt = '0' + dt;
   }
   if (month < 10) {
-    month = "0" + month;
+    month = '0' + month;
   }
 
-  return year + "-" + month + "-" + dt;
+  return year + '-' + month + '-' + dt;
 }
 
 /**
@@ -136,15 +116,15 @@ export function date_to_string(last_modified, whithHour) {
     let dt = last_modified.getDate();
 
     if (dt < 10) {
-      dt = "0" + dt;
+      dt = '0' + dt;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = '0' + month;
     }
-    let strdate = year + "-" + month + "-" + dt;
+    let strdate = year + '-' + month + '-' + dt;
     strdate += whithHour
-      ? " , " + last_modified.getHours() + ":" + last_modified.getMinutes()
-      : "";
+      ? ' , ' + last_modified.getHours() + ':' + last_modified.getMinutes()
+      : '';
 
     return strdate;
   }
@@ -170,7 +150,7 @@ export function ordoner(res, compar, order = 1) {
  *join les noms par des tirets @param {compar} a property
  */
 export function hypheny(res) {
-  return res ? res.replace(/\s+/g, "-") : "";
+  return res ? res.replace(/\s+/g, '-') : '';
 }
 /**
  *serealiser les donnéess @param {compar} a property
@@ -179,10 +159,10 @@ export function UriEncoder(obj) {
   var formBody = [];
   for (var property in obj) {
     formBody.push(
-      encodeURIComponent(property) + "=" + encodeURIComponent(obj[property])
+      encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]),
     );
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&');
   return formBody;
 }
 
@@ -203,14 +183,16 @@ export const object_comparer = (o1, o2) => {
  * @param {shema} o1 fi
  * @returns object without html
  */
-export const htmlSafe = (o1) => {
-  return o1 ? o1.replace(/(<([^>]+)>)/gi, "") : "";
+export const htmlSafe = o1 => {
+  return o1 ? o1.replace(/(<([^>]+)>)/gi, '') : '';
 };
 
-export const monthDiff = (d1, d2) => {
-  var months;
-  months = (d2.getFullYear() - d1.getFullYear()) * 12;
-  months -= d1.getMonth();
-  months += d2.getMonth();
-  return months <= 0 ? 0 : months;
+/**
+ *
+ * @param {shema} o1 fi
+ * @returns paginer une liste
+ */
+export const paginate = (array, page_size, page_number) => {
+  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+  return array.slice((page_number - 1) * page_size, page_number * page_size);
 };

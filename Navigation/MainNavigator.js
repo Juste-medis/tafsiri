@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/stack';
 import Dasboard from '../Screens/connected/Dasboard';
 import Recorder from '../Screens/connected/Recorder';
+import Challenge from '../Screens/connected/Challenge';
 
 const Stack = createStackNavigator();
 function Navigation({navigation}) {
@@ -35,6 +36,11 @@ function Navigation({navigation}) {
           options={{title: 'Enregistrement'}}
           name="Recorder"
           component={Recorder}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Challenge"
+          component={Challenge}
         />
       </Stack.Navigator>
     </SafeAreaProvider>

@@ -48,7 +48,7 @@ let Fetcher = {
     return await res.json();
   },
   GetSection: async function (setdada) {
-    let url = baseUrl + '/api/users/login';
+    let url = baseUrl + '/api/users/login/';
     let res = await fetch(url, {
       method: 'POST',
       body: setdada,
@@ -59,17 +59,20 @@ let Fetcher = {
     return await res.json();
   },
   PutSection: async function (setdada) {
-    let url = baseUrl + '/api/speech/uploadfile';
-    console.log(url);
+    let url = 'http://217.160.170.119:8000/api/speech/uploadfile/';
     let res = await fetch(url, {
       method: 'POST',
       body: setdada,
+      redirect: 'follow',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+        'Content-Type': false,
       },
     });
+    console.log(res.status);
     return await res.json();
   },
+
   CheckAuth: async function (setdada, tk) {
     let url = baseUrl + '/auth/users/current/' + setdada;
     let res = await fetch(url, {
@@ -78,17 +81,6 @@ let Fetcher = {
       body: tk,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-    return await res.json();
-  },
-  ChangePassPassu: async function (user_pass) {
-    let res = await fetch(baseUrl + '/auth/users/changepass/recorvery', {
-      method: 'post',
-      body: user_pass,
-      credentials: 'include',
-      headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
