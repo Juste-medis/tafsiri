@@ -30,7 +30,7 @@ class AudioRecorde extends Component {
     playing: false,
     stoppedRecording: false,
     finished: false,
-    audioPath: AudioUtils.DocumentDirectoryPath + '/test.aac',
+    audioPath: AudioUtils.DocumentDirectoryPath + '/test.wav',
     hasPermission: undefined,
   };
 
@@ -39,7 +39,7 @@ class AudioRecorde extends Component {
       SampleRate: 22050,
       Channels: 1,
       AudioQuality: 'Medium',
-      AudioEncoding: 'aac',
+      AudioEncoding: 'wav',
       AudioEncodingBitRate: 32000,
     });
   }

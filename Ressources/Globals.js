@@ -9,9 +9,6 @@ export default {
     LO_SPLASH: require('../assets/lo_splash.png'),
     LOGO: require('../Images/logo.png'),
   },
-  FONTS: {
-    Montserrat_LightItalic: require('../assets/fonts/Montserrat-LightItalic.ttf'),
-  },
   COLORS: {
     primary: '#fd7e14',
     secondary: '#204b9bff',

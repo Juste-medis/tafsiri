@@ -1,44 +1,98 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import {Button, DataTable} from 'react-native-paper';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {DataTable} from 'react-native-paper';
+import Fetcher from '../../API/fetcher';
 import ChallengeTop from '../../components/ChallengeTop';
+import {paginate, toast_message} from '../../Helpers/Utils';
 import Globals from '../../Ressources/Globals';
 import {styleChallenge as styles} from '../../Ressources/Styles';
+import Toast from 'react-native-toast-message';
+import LottieView from 'lottie-react-native';
 
-const optionsPerPage = [2, 3, 4];
-
-let partiarr = [
-  {name: 'AKAM', valides: 500, rang: 1},
-  {name: 'ALTO', valides: 150, rang: 2},
-  {name: 'fréjus laleye', valides: 320, rang: 3},
-  {name: 'FHN', valides: 188, rang: 4},
-  {name: 'LSI', valides: 200, rang: 5},
-  {name: 'ALTR', valides: 250, rang: 6},
-  {name: 'ATI', valides: 230, rang: 7},
-  {name: 'ATI', valides: 230, rang: 8},
-  {name: 'JOPA', valides: 630, rang: 9},
-  {name: 'ROIL', valides: 730, rang: 10},
-  {name: 'LOLO', valides: 240, rang: 11},
-  {name: 'POIM', valides: 230, rang: 12},
-  {name: 'POIM', valides: 230, rang: 13},
-];
-
-const MyComponent = () => {
-  const [page, setPage] = React.useState(2);
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
-  let totalpage = Math.ceil(partiarr.length / 6);
+const Challenge = ({navigation}) => {
+  const [page, setPage] = React.useState(1);
+  const [spinner, setspinner] = React.useState(false);
+  const [metadata, setmetadata] = React.useState({
+    participants: 1,
+    rang: 1,
+    list: [
+      {firstname: 'AKAM', valid: 500, rang: 1},
+      {firstname: 'ALTO', valid: 150, rang: 2},
+      {firstname: 'fréjus laleye', valid: 320, rang: 3},
+      {firstname: 'FHN', valid: 188, rang: 4},
+      {firstname: 'LSI', valid: 200, rang: 5},
+      {firstname: 'ALTR', valid: 250, rang: 6},
+      {firstname: 'ATI', valid: 230, rang: 7},
+      {firstname: 'ATI', valid: 230, rang: 8},
+      {firstname: 'JOPA', valid: 630, rang: 9},
+      {firstname: 'ROIL', valid: 730, rang: 10},
+      {firstname: 'LOLO', valid: 240, rang: 11},
+      {firstname: 'POIM', valid: 230, rang: 12},
+      {firstname: 'POIM', valid: 230, rang: 13},
+    ],
+  });
+  let totalpage = Math.ceil(metadata.list.length / 10);
+  console.log(paginate(metadata.list, 10, page));
 
   React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
+    if (!Globals.INTERNET) {
+      toast_message(Globals.STRINGS.no_internet);
+      navigation.goBack();
+    } else {
+      load_init();
+    }
+    load_init();
+    return () => {};
+  }, []);
 
+  const load_init = () => {
+    setspinner(true);
+    Fetcher.GetChallenges(
+      JSON.stringify({
+        results: {
+          phone: Globals.PROFIL_INFO.phone,
+          token: Globals.PROFIL_INFO.user.token,
+        },
+      }),
+    )
+      .then(res => {
+        setspinner(false);
+        if (res.errors) {
+          err_err(
+            typeof res.errors[0] === 'string'
+              ? res.errors[0]
+              : Globals.STRINGS.Ocurred_error,
+          );
+        } else {
+          //setmetadata({...metadata, ...res});
+        }
+        setspinner(false);
+      })
+      .catch(err => {
+        err_err(err);
+      });
+  };
+  function err_err(err) {
+    setspinner(false);
+    Toast.show({
+      type: 'error',
+      text1: 'Eureur',
+      text2:
+        typeof err === 'string'
+          ? err
+          : err.name === 'TypeError'
+          ? Globals.STRINGS.no_internet
+          : err.message || Globals.STRINGS.Ocurred_error,
+    });
+  }
   const TableRower = ({meta}) => {
     return (
       <DataTable.Row
         style={{
           backgroundColor:
-            Globals.PROFIL_INFO.user.username === meta.name
+            Globals.PROFIL_INFO.user.username === meta.firstname
               ? '#ffeed6ff'
               : meta.rang % 3 === 0
               ? '#efeef2ff'
@@ -49,11 +103,11 @@ const MyComponent = () => {
             style={{
               fontWeight: '600',
             }}>
-            {meta.name}
+            {meta.firstname}
           </Text>
         </DataTable.Cell>
         <View style={{display: 'flex', flexDirection: 'row', width: '35%'}}>
-          <DataTable.Cell numeric>{meta.valides}</DataTable.Cell>
+          <DataTable.Cell numeric>{meta.valid}</DataTable.Cell>
           <DataTable.Cell numeric>{meta.rang} </DataTable.Cell>
         </View>
       </DataTable.Row>
@@ -61,7 +115,9 @@ const MyComponent = () => {
   };
   return (
     <ScrollView style={styles.main_container}>
-      <ChallengeTop rang={3} participants={30} />
+      <Toast position="top" topOffset={1} />
+
+      <ChallengeTop rang={metadata.rang} participants={metadata.participants} />
       <DataTable style={{paddingHorizontal: '10%'}}>
         <DataTable.Header
           style={{
@@ -69,14 +125,26 @@ const MyComponent = () => {
           }}>
           <DataTable.Title>Joueur</DataTable.Title>
           <View style={{display: 'flex', flexDirection: 'row', width: '35%'}}>
-            <DataTable.Title numeric>Valides</DataTable.Title>
+            <DataTable.Title numeric>valides</DataTable.Title>
             <DataTable.Title numeric>Rang</DataTable.Title>
           </View>
         </DataTable.Header>
         <ScrollView style={styles.middle_container}>
-          {partiarr.map((mes, i) => (
-            <TableRower meta={mes} key={`joueur${i}`} />
-          ))}
+          {spinner ? (
+            <LottieView
+              style={{
+                height: 150,
+                width: 100,
+              }}
+              source={require('../../assets/loading.json')}
+              autoPlay
+              loop
+            />
+          ) : (
+            paginate(metadata.list, 10, page).map((mes, i) => (
+              <TableRower meta={mes} key={`joueur${i}`} />
+            ))
+          )}
         </ScrollView>
       </DataTable>
       <ScrollView
@@ -84,7 +152,7 @@ const MyComponent = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-        {Array.apply(null, Array(90)).map((mes, index) => {
+        {Array.apply(null, Array(totalpage)).map((mes, index) => {
           let ni = index + 1;
           return (
             <TouchableOpacity
@@ -109,4 +177,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default Challenge;

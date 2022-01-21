@@ -145,12 +145,15 @@ export default function Dasboard({navigation}) {
           labelStyle={{color: 'white'}}
           theme={{colors: {primary: '#fd7e14'}}}
           mode="contained"
+          loading={spinner}
+          disabled={spinner}
           onPress={() => {
             navigation.navigate('Recorder');
           }}>
           {Globals.STRINGS.translate}
         </Button>
-        {Globals.PROFIL_INFO.user.profile === 'joueur' && (
+        {/*¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤*/}
+        {Globals.PROFIL_INFO.user.profile !== 'joueur' && (
           <Button
             style={[
               styles.action_button,

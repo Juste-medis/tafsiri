@@ -58,6 +58,17 @@ let Fetcher = {
     });
     return await res.json();
   },
+  GetChallenges: async function (setdada) {
+    let url = baseUrl + '/api/challenge/results';
+    let res = await fetch(url, {
+      method: 'POST',
+      body: setdada,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return await res.json();
+  },
   PutSection: async function (setdada) {
     let url = 'http://217.160.170.119:8000/api/speech/uploadfile/';
     let res = await fetch(url, {
@@ -69,10 +80,8 @@ let Fetcher = {
         'Content-Type': false,
       },
     });
-    console.log(res.status);
     return await res.json();
   },
-
   CheckAuth: async function (setdada, tk) {
     let url = baseUrl + '/auth/users/current/' + setdada;
     let res = await fetch(url, {

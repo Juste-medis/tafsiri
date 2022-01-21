@@ -271,7 +271,7 @@ if (mobile_360_750) {
   });
   tyleChallenge = StyleSheet.create({
     main_container: {backgroundColor: 'white', height: '100%'},
-    middle_container: {},
+    middle_container: {minHeight: 200},
     main_scroller: {
       paddingBottom: '10%',
       width: '100%',
