@@ -166,6 +166,7 @@ if (mobile_360_750) {
       justifyContent: 'space-around',
       width: '100%',
       alignItems: 'center',
+      minHeight: '80%',
     },
     middle_fields_container: {
       flexDirection: 'column',
@@ -176,6 +177,7 @@ if (mobile_360_750) {
       fontWeight: '700',
       color: Globals.COLORS.grey,
       fontSize: 13,
+      marginTop: 5,
     },
     midle_prop_value: {
       fontWeight: 'bold',

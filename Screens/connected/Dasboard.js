@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
-import {Text, View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import Globals from '../../Ressources/Globals';
 import {styleDashBoard as styles} from '../../Ressources/Styles';
 import FormButton from '../../components/FormButton';
@@ -69,44 +69,36 @@ export default function Dasboard({navigation}) {
     return (
       <View style={styles.middle_fields_container}>
         <Text style={styles.midle_prop_value}>{meta.value}</Text>
-        <Text style={styles.midle_prop_title}>
-          <Icon icon={meta.icon} color="#000" size={20} />
-          {meta.legend}
-        </Text>
+        <Text style={styles.midle_prop_title}>{meta.legend}</Text>
       </View>
     );
   };
 
   return (
-    <View style={styles.main_container}>
+    <ScrollView contentContainerStyle={styles.main_container}>
       <Toast position="bottom" />
-
       <View style={styles.middle_heberger}>
         <View style={styles.top_container}>
-          <Icon name="user" size={200} color="grey" />
+          <Icon name="user" size={150} color="grey" />
           <Text style={styles.autor_name}>
             {dataprop.username} ({Globals.PROFIL_INFO.phone})
           </Text>
         </View>
         <View style={styles.middle_container}>
           {MiddleFielder({
-            icon: 'microphone',
             legend: Globals.STRINGS.save,
             value: dataprop.recordings,
           })}
           {MiddleFielder({
-            icon: 'check-circle',
-            legend: Globals.STRINGS.validated,
+            legend: Globals.STRINGS.checked,
             value: dataprop.validated,
           })}
           {MiddleFielder({
-            icon: 'remove',
             legend: Globals.STRINGS.rejected,
             value: dataprop.rejected,
           })}
           {Globals.PROFIL_INFO.user.profile === 'traducteur' &&
             MiddleFielder({
-              icon: 'usd',
               legend: Globals.STRINGS.gain,
               value: dataprop.gain,
             })}
@@ -153,7 +145,7 @@ export default function Dasboard({navigation}) {
           {Globals.STRINGS.translate}
         </Button>
         {/*¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤*/}
-        {Globals.PROFIL_INFO.user.profile !== 'joueur' && (
+        {Globals.PROFIL_INFO.user.profile === 'joueur' && (
           <Button
             style={[
               styles.action_button,
@@ -168,7 +160,6 @@ export default function Dasboard({navigation}) {
           </Button>
         )}
       </View>
-      <View></View>
-    </View>
+    </ScrollView>
   );
 }

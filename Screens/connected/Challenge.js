@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import Fetcher from '../../API/fetcher';
 import ChallengeTop from '../../components/ChallengeTop';
@@ -17,25 +17,9 @@ const Challenge = ({navigation}) => {
   const [metadata, setmetadata] = React.useState({
     participants: 1,
     rang: 1,
-    list: [
-      {firstname: 'AKAM', valid: 500, rang: 1},
-      {firstname: 'ALTO', valid: 150, rang: 2},
-      {firstname: 'fréjus laleye', valid: 320, rang: 3},
-      {firstname: 'FHN', valid: 188, rang: 4},
-      {firstname: 'LSI', valid: 200, rang: 5},
-      {firstname: 'ALTR', valid: 250, rang: 6},
-      {firstname: 'ATI', valid: 230, rang: 7},
-      {firstname: 'ATI', valid: 230, rang: 8},
-      {firstname: 'JOPA', valid: 630, rang: 9},
-      {firstname: 'ROIL', valid: 730, rang: 10},
-      {firstname: 'LOLO', valid: 240, rang: 11},
-      {firstname: 'POIM', valid: 230, rang: 12},
-      {firstname: 'POIM', valid: 230, rang: 13},
-    ],
+    list: [],
   });
   let totalpage = Math.ceil(metadata.list.length / 10);
-  console.log(paginate(metadata.list, 10, page));
-
   React.useEffect(() => {
     if (!Globals.INTERNET) {
       toast_message(Globals.STRINGS.no_internet);
@@ -66,11 +50,12 @@ const Challenge = ({navigation}) => {
               : Globals.STRINGS.Ocurred_error,
           );
         } else {
-          //setmetadata({...metadata, ...res});
+          setmetadata({...metadata, ...res});
         }
         setspinner(false);
       })
       .catch(err => {
+        console.log(err);
         err_err(err);
       });
   };
@@ -115,7 +100,7 @@ const Challenge = ({navigation}) => {
   };
   return (
     <ScrollView style={styles.main_container}>
-      <Toast position="top" topOffset={1} />
+      <Toast position="bottom" topOffset={1} />
 
       <ChallengeTop rang={metadata.rang} participants={metadata.participants} />
       <DataTable style={{paddingHorizontal: '10%'}}>
