@@ -5,13 +5,22 @@ import {Button} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('screen');
 
-export default function FormButton({title, modeValue, ...rest}) {
+export default function FormButton({
+  title,
+  style,
+  contentStyle,
+  modeValue,
+  ...rest
+}) {
   return (
     <Button
       mode={modeValue}
       {...rest}
-      style={styles.button}
-      contentStyle={styles.buttonContainer}
+      style={[styles.button, style ? style : null]}
+      contentStyle={[
+        styles.buttonContainer,
+        contentStyle ? contentStyle : null,
+      ]}
       theme={{colors: {primary: '#fd7e14'}}}>
       <Text style={{color: 'white'}}>{title}</Text>
     </Button>

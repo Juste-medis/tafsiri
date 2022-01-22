@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, StatusBar, Text, View} from 'react-native';
 import Globals from '../../Ressources/Globals';
 import {styleDashBoard as styles} from '../../Ressources/Styles';
 import FormButton from '../../components/FormButton';
@@ -76,12 +76,26 @@ export default function Dasboard({navigation}) {
 
   return (
     <ScrollView contentContainerStyle={styles.main_container}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={Globals.COLORS.white}
+      />
       <Toast position="bottom" />
       <View style={styles.middle_heberger}>
         <View style={styles.top_container}>
-          <Icon name="user" size={150} color="grey" />
+          <View style={styles.avatar_cont}>
+            <Icon name="user" size={90} color="grey" />
+          </View>
           <Text style={styles.autor_name}>
-            {dataprop.username} ({Globals.PROFIL_INFO.phone})
+            {dataprop.username}
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: 'normal',
+              }}>
+              {' '}
+              ({Globals.PROFIL_INFO.phone})
+            </Text>
           </Text>
         </View>
         <View style={styles.middle_container}>
@@ -108,11 +122,13 @@ export default function Dasboard({navigation}) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-around',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             width: '100%',
+            marginTop: 40,
           }}>
           <FormButton
             style={styles.action_button}
+            contentStyle={{margin: 0, width: null, height: null}}
             title={Globals.STRINGS.signout}
             modeValue="contained"
             labelStyle={styles.loginButtonLabel}

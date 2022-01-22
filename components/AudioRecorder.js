@@ -176,7 +176,13 @@ class AudioRecorde extends Component {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            {!this.state.recording || this.state.paused ? (
+            {this.props.spinner ? (
+              <LottieView
+                source={require('../assets/loties/loading.json')}
+                autoPlay
+                loop
+              />
+            ) : !this.state.recording || this.state.paused ? (
               <Icon name="microphone" size={70} color="#fd7e14" />
             ) : (
               <LottieView

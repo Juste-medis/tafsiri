@@ -110,7 +110,7 @@ const Challenge = ({navigation}) => {
           }}>
           <DataTable.Title>Joueur</DataTable.Title>
           <View style={{display: 'flex', flexDirection: 'row', width: '35%'}}>
-            <DataTable.Title numeric>valides</DataTable.Title>
+            <DataTable.Title numeric>validés</DataTable.Title>
             <DataTable.Title numeric>Rang</DataTable.Title>
           </View>
         </DataTable.Header>
@@ -121,7 +121,7 @@ const Challenge = ({navigation}) => {
                 height: 150,
                 width: 100,
               }}
-              source={require('../../assets/loading.json')}
+              source={require('../../assets/loties/loading.json')}
               autoPlay
               loop
             />

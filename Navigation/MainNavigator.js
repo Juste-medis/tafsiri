@@ -26,10 +26,14 @@ function Navigation({navigation}) {
         }}>
         <Stack.Screen
           options={{
-            headerStyle: {backgroundColor: '#fd7e14'},
-            headerTitleStyle: {color: 'white'},
+            headerStyle: {
+              backgroundColor: 'white',
+              height: 50,
+            },
+            headerTitleStyle: {color: '#fd7e14'},
+            title: 'Tableau de bord',
           }}
-          name="Tableau de bord"
+          name="Dasboard"
           component={Dasboard}
         />
         <Stack.Screen
@@ -38,7 +42,7 @@ function Navigation({navigation}) {
           component={Recorder}
         />
         <Stack.Screen
-          options={{headerShown: false}}
+          options={{headerStyle: {height: 50}}}
           name="Challenge"
           component={Challenge}
         />
